@@ -7,6 +7,7 @@ import OrderSummary from "../../Components/Burger/OrderSummary/OrderSummary";
 import axios from "../../axios-orders";
 import Spinner from "../../Components/UI/Spinner/Spinner";
 import withErrorHandler from "../../Hoc/withErrorHandler/withErrorHandler";
+import { connect } from "react-redux";
 
 const INGREDIENT_PRICE = {
   salad: 10,
@@ -16,7 +17,6 @@ const INGREDIENT_PRICE = {
 };
 class BurgerBuilder extends Component {
   state = {
-    Ingredients: null,
     totalPrice: 20,
     purchasable: false,
     purchasing: false,
@@ -25,14 +25,14 @@ class BurgerBuilder extends Component {
   };
   componentDidMount() {
     console.log(this.props);
-    axios
-      .get("https://react-burger-app-815ec.firebaseio.com/ingredients.json")
-      .then(response => {
-        this.setState({ Ingredients: response.data });
-      })
-      .catch(error => {
-        this.setState({ error: true });
-      });
+    //axios
+    //.get("https://react-burger-app-815ec.firebaseio.com/ingredients.json")
+    //.then(response => {
+    //   this.setState({ Ingredients: response.data });
+    // })
+    // .catch(error => {
+    //   this.setState({ error: true });
+    // });
   }
   updatePurchaseState = Ingredients => {
     const sum = Object.keys(Ingredients)
@@ -174,4 +174,24 @@ class BurgerBuilder extends Component {
     );
   }
 }
-export default withErrorHandler(BurgerBuilder, axios);
+
+const matchStateToProps = state => {
+  return {
+    ing: state.Ingredients
+  };
+};
+
+const matchDispatchToProps = dispatch => {
+  return {
+    onIngredientsAdded: ingName =>
+      dispatch({ type: "ADD_Ingredients", IngredientsName: ingName }),
+    onIngredientsRemoved: ingName => dispatch => ({
+      type: "REMOVE_Ingredients",
+      IngredientsName: ingName
+    })
+  };
+};
+export default connect(
+  matchStateToProps,
+  matchDispatchToProps
+)(withErrorHandler(BurgerBuilder, axios));

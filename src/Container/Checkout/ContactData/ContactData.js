@@ -71,7 +71,7 @@ class ContactData extends Component {
     for (let formElementIdentifier in this.state.orderForm) {
       formData[formElementIdentifier] = this.state.orderForm[
         formElementIdentifier
-      ];
+      ].value;
     }
     this.setState({ loading: true });
     const order = {
@@ -92,7 +92,7 @@ class ContactData extends Component {
   };
   inputChangeHandler = (event, inputIdentifier) => {
     const updatedOrderform = {
-      ...this.setState.orderForm
+      ...this.state.orderForm
     };
     const updatedFormElement = {
       ...updatedOrderform[inputIdentifier]
