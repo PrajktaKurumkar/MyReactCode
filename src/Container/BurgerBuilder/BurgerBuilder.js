@@ -121,7 +121,7 @@ class BurgerBuilder extends Component {
   };
   render() {
     const disabledInfo = {
-      ...this.state.ingredients
+      ...this.props.ings
     };
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
@@ -135,13 +135,13 @@ class BurgerBuilder extends Component {
       <Spinner />
     );
 
-    if (this.state.Ingredients) {
+    if (this.props.ings) {
       burger = (
         <Aux>
-          <Burger Ingredients={this.state.Ingredients} />
+          <Burger Ingredients={this.props.ings} />
           <BuildControls
-            addIngredient={this.addIngredientHandler}
-            removeIngredient={this.removeIngredientHandler}
+            addIngredient={this.props.onIngredientsAdded}
+            removeIngredient={this.props.onIngredientsRemoved}
             price={this.state.totalPrice}
             purchasable={this.state.purchasable}
             ordered={this.purchasehandler}
@@ -152,7 +152,7 @@ class BurgerBuilder extends Component {
       orderSummary = (
         <OrderSummary
           price={this.state.totalPrice}
-          Ingredients={this.state.Ingredients}
+          Ingredients={this.props.ings}
           continuePurchase={this.continuePurchaseHandler}
           cancelPurchase={this.cancelPurchaseHandler}
         />
@@ -177,7 +177,7 @@ class BurgerBuilder extends Component {
 
 const matchStateToProps = state => {
   return {
-    ing: state.Ingredients
+    ings: state.Ingredients
   };
 };
 
