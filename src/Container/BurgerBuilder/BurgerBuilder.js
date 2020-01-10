@@ -9,17 +9,10 @@ import Spinner from "../../Components/UI/Spinner/Spinner";
 import withErrorHandler from "../../Hoc/withErrorHandler/withErrorHandler";
 import { connect } from "react-redux";
 
-const INGREDIENT_PRICE = {
-  salad: 10,
-  meat: 20,
-  bacon: 20,
-  cheese: 10
-};
 class BurgerBuilder extends Component {
   state = {
-    totalPrice: 20,
-    purchasable: false,
-    purchasing: false,
+    purchasable: false,//questinable
+    purchasing: false,//questioning
     loading: false,
     error: false
   };
@@ -45,7 +38,7 @@ class BurgerBuilder extends Component {
     this.setState({ purchasable: sum > 0 });
   };
 
-  addIngredientHandler = type => {
+  /* addIngredientHandler = type => {
     const oldcount = this.state.Ingredients[type];
     const updatedCount = oldcount + 1;
     const updatedIngredients = { ...this.state.Ingredients };
@@ -70,7 +63,7 @@ class BurgerBuilder extends Component {
     const newPrice = oldPrice - priceDeduction;
     this.setState({ totalPrice: newPrice, Ingredients: updatedIngredients });
     this.updatePurchaseState(updatedIngredients);
-  };
+  };*/
   purchasehandler = () => {
     this.setState({ purchasing: true });
   };
@@ -94,8 +87,7 @@ class BurgerBuilder extends Component {
       pathname: "/checkout",
       search: "?" + queryString
     });
-    /* this.setState({ loading: true 
-    });
+    this.setState({ loading: true });
     const order = {
       Ingredients: this.state.Ingredients,
       Price: this.state.totalPrice,
@@ -117,7 +109,7 @@ class BurgerBuilder extends Component {
       })
       .catch(error => {
         this.setState({ loading: false, purchasing: false });
-      });*/
+      });
   };
   render() {
     const disabledInfo = {
@@ -142,7 +134,7 @@ class BurgerBuilder extends Component {
           <BuildControls
             addIngredient={this.props.onIngredientsAdded}
             removeIngredient={this.props.onIngredientsRemoved}
-            price={this.state.totalPrice}
+            price={this.props.price}
             purchasable={this.state.purchasable}
             ordered={this.purchasehandler}
             disabled={disabledInfo}
@@ -151,7 +143,7 @@ class BurgerBuilder extends Component {
       );
       orderSummary = (
         <OrderSummary
-          price={this.state.totalPrice}
+          price={this.props.price}
           Ingredients={this.props.ings}
           continuePurchase={this.continuePurchaseHandler}
           cancelPurchase={this.cancelPurchaseHandler}
@@ -177,7 +169,8 @@ class BurgerBuilder extends Component {
 
 const matchStateToProps = state => {
   return {
-    ings: state.Ingredients
+    ings: state.Ingredients,
+    price: state.totalPrice
   };
 };
 
